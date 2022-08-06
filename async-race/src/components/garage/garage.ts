@@ -9,7 +9,7 @@ class Garage extends Control {
     carElements: HTMLElement[];
 
     constructor(parentNode: HTMLElement) {
-        super(parentNode, 'div', 'hidden', 'Garage');
+        super(parentNode, 'div', ['hidden'], 'Garage');
         this.carElements = [];
         this.renderCars();
     }
@@ -19,7 +19,7 @@ class Garage extends Control {
         this.garageCars = garageData.cars;
         this.carsCount = garageData.count;
         console.log(this.garageCars, this.carsCount);
-        const carsTable = new Control(this.node, 'div', 'cars-list');
+        const carsTable = new Control(this.node, 'div', ['cars-list']);
 
         for (let i = 0; i < this.garageCars.length; i++) {
             const carItem = new Car(this.garageCars[i]);
