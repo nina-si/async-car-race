@@ -5,6 +5,8 @@ class GarageForm extends Control {
     garageBtns!: Control<HTMLElement>;
     createForm!: Control<HTMLElement>;
     updateForm!: Control<HTMLElement>;
+    onGenerateCars!: () => void;
+
     constructor(parentNode: HTMLElement) {
         super(parentNode);
         this.render();
@@ -52,7 +54,7 @@ class GarageForm extends Control {
         const resetBtn = new Control(this.garageBtns.node, 'button', ['btn'], 'Reset');
         resetBtn.node.onclick = () => console.log('RESET');
         const generateCarsBtn = new Control(this.garageBtns.node, 'button', ['btn'], 'Generate Cars');
-        generateCarsBtn.node.onclick = () => console.log('GENERATE NEW CARS');
+        generateCarsBtn.node.onclick = () => this.onGenerateCars();
     }
 }
 
