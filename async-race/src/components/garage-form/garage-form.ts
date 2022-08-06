@@ -12,6 +12,7 @@ class GarageForm extends Control {
     colorUpdate!: InputControl;
     updateCarBtn!: Control<HTMLElement>;
     onResetCars!: () => void;
+    onStartRace!: () => void;
 
     constructor(parentNode: HTMLElement) {
         super(parentNode);
@@ -47,7 +48,7 @@ class GarageForm extends Control {
 
     renderGarageBtns() {
         const raceBtn = new Control(this.garageBtns.node, 'button', ['btn', 'btn-race'], 'Race');
-        raceBtn.node.onclick = () => console.log('RACE Started');
+        raceBtn.node.onclick = () => this.onStartRace();
         const resetBtn = new Control(this.garageBtns.node, 'button', ['btn'], 'Reset');
         resetBtn.node.onclick = () => this.onResetCars();
         const generateCarsBtn = new Control(this.garageBtns.node, 'button', ['btn'], 'Generate Cars');

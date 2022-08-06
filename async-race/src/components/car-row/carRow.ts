@@ -61,7 +61,6 @@ class CarRow extends Control {
 
     startDriving = async () => {
         this.asessedDriveTime = await this.getDriveTime();
-        console.log(this.carIcon.node.style.left, 'START DRIVE');
         this.isStopped = false;
         this.animateCar();
         const response = await switchDriveMode(this.id);
@@ -69,10 +68,10 @@ class CarRow extends Control {
             this.isBroken = true;
             this.isMoving = false;
         }
+        return response;
     };
 
     animateCar = async (): Promise<void> => {
-        console.log(this.carIcon.node.style.left, 'START ANIMATE');
         if (this.asessedDriveTime) {
             const animationStep = (TRACK_END - TRACK_START) / (this.asessedDriveTime / ANIMATION_SPEED);
             let currentPosition = TRACK_START;
@@ -103,6 +102,16 @@ class CarRow extends Control {
         this.isBroken = false;
         this.isStopped = true;
         this.carIcon.node.style.left = `${TRACK_START}%`;
+    };
+
+    startRace = async () => {
+        const startTime = new Date().getTime();
+
+        const result = await this.startDriving();
+
+        if (result === 200) {
+            return { id: this.id, time: (new Date().getTime() - startTime) / 1000 };
+        } else throw new Error(`Car № ${this.id} didn't finish`);
     };
 }
 

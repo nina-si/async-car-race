@@ -20,6 +20,7 @@ class Garage extends Control {
         this.garageForm = new GarageForm(this.node);
         this.garageForm.onGenerateCars = () => this.generateNewCars();
         this.garageForm.onCarUpdate = () => this.updateCarsField();
+        this.garageForm.onStartRace = () => this.startRace();
         this.garageForm.onResetCars = () => this.resetCars();
         this.carElements = [];
         this.renderCars();
@@ -65,6 +66,12 @@ class Garage extends Control {
     removeCarFromGarage = async (id: number) => {
         await deleteCar(id);
         this.updateCarsField();
+    };
+
+    startRace = async () => {
+        Promise.any(this.carElements.map((car) => car.startRace())).then((data) =>
+            console.log(`WINNER IS ${data.id} with time ${data.time}`)
+        );
     };
 
     resetCars = async () => {
