@@ -1,17 +1,16 @@
-import { TCar } from '../../types';
 import Page from '../page';
 
 const rootElement = document.querySelector('#root') as HTMLElement;
 
 class App {
     page!: Page;
-    cars: TCar[];
+
     constructor() {
-        this.cars = [];
+        this.page = new Page();
     }
 
     start() {
-        this.page = new Page(rootElement);
+        rootElement.append(this.page.node);
     }
 }
 

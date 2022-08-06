@@ -8,8 +8,8 @@ class Page extends Control {
     garage: Garage;
     winners: Winners;
 
-    constructor(parentNode: HTMLElement) {
-        super(parentNode, 'div', 'wrapper');
+    constructor() {
+        super(null, 'div', 'wrapper');
         this.header = new Header(this.node);
         this.garage = new Garage(this.node);
         this.winners = new Winners(this.node);
