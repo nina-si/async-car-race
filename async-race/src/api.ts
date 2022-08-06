@@ -64,3 +64,13 @@ export const switchDriveMode = async (id: number) => {
 
     return result.status;
 };
+
+export const stopEngine = async (id: number) => {
+    const result = (
+        await fetch(`${ENGINE_URL}?id=${id}&status=${DRIVE_STATUS.STOPPED}`, {
+            method: 'PATCH',
+        })
+    ).json();
+
+    return result;
+};

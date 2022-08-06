@@ -1,4 +1,4 @@
-import { getDriveParams, switchDriveMode } from '../../api';
+import { getDriveParams, stopEngine, switchDriveMode } from '../../api';
 import { ANIMATION_SPEED, DRIVE_STATUS, TRACK_END, TRACK_START } from '../../constants';
 import { TCar } from '../../types';
 import Control from '../common/control';
@@ -13,6 +13,7 @@ class CarRow extends Control {
     asessedDriveTime!: number;
     isMoving!: boolean;
     isBroken!: boolean;
+    isStopped!: boolean;
 
     constructor(carData: TCar) {
         super(null, 'div', ['car-item']);
@@ -60,29 +61,33 @@ class CarRow extends Control {
 
     startDriving = async () => {
         this.asessedDriveTime = await this.getDriveTime();
+        console.log(this.carIcon.node.style.left, 'START DRIVE');
+        this.isStopped = false;
         this.animateCar();
         const response = await switchDriveMode(this.id);
-        if (response === 500) {
+        if (response === 500 && !this.isStopped) {
             this.isBroken = true;
             this.isMoving = false;
         }
     };
 
     animateCar = async (): Promise<void> => {
+        console.log(this.carIcon.node.style.left, 'START ANIMATE');
         if (this.asessedDriveTime) {
             const animationStep = (TRACK_END - TRACK_START) / (this.asessedDriveTime / ANIMATION_SPEED);
             let currentPosition = TRACK_START;
             this.isBroken = false;
             this.isMoving = true;
-            setInterval(() => {
+            const animationInterval = setInterval(() => {
                 if (this.isMoving) {
                     if (currentPosition < TRACK_END) {
                         currentPosition += animationStep;
                         this.carIcon.node.style.left = `${currentPosition}%`;
                     } else if (currentPosition >= TRACK_END) {
                         this.isMoving = false;
+                        clearInterval(animationInterval);
                     }
-                } else return;
+                } else clearInterval(animationInterval);
             }, ANIMATION_SPEED);
         }
     };
@@ -93,7 +98,11 @@ class CarRow extends Control {
     };
 
     stopDriving = async () => {
-        console.log('STOP');
+        await stopEngine(this.id);
+        this.isMoving = false;
+        this.isBroken = false;
+        this.isStopped = true;
+        this.carIcon.node.style.left = `${TRACK_START}%`;
     };
 }
 
