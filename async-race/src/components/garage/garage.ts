@@ -1,4 +1,4 @@
-import { createCar, getCars } from '../../api';
+import { createCar, deleteCar, getCars } from '../../api';
 import { generateNewCar } from '../../helpers';
 import { TCar } from '../../types';
 import CarRow from '../car-row';
@@ -28,6 +28,7 @@ class Garage extends Control {
         for (let i = 0; i < this.garageCars.length; i++) {
             const carItem = new CarRow(this.garageCars[i]);
             carItem.onCarSelect = (id, name, string) => this.selectCar(id, name, string);
+            carItem.onCarRemove = (id) => this.removeCarFromGarage(id);
             carItem.renderCarRow();
             this.carElements.push(carItem.node);
             this.carsField.node.appendChild(carItem.node);
@@ -56,6 +57,11 @@ class Garage extends Control {
     selectCar(id: number, name: string, color: string) {
         this.garageForm.fillUpdateForm(id, name, color);
     }
+
+    removeCarFromGarage = async (id: number) => {
+        await deleteCar(id);
+        this.updateCarsField();
+    };
 }
 
 export default Garage;

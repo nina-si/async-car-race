@@ -7,6 +7,7 @@ class CarRow extends Control {
     color: string;
     carIcon!: Control<HTMLElement>;
     onCarSelect!: (carId: number, name: string, color: string) => void;
+    onCarRemove!: (id: number) => void;
 
     constructor(carData: TCar) {
         super(null, 'div', ['car-item']);
@@ -36,7 +37,7 @@ class CarRow extends Control {
         const selectBtn = new Control(carBtns.node, 'button', ['btn'], 'Select');
         selectBtn.node.onclick = () => this.onCarSelect(this.id, this.name, this.color);
         const removeBtn = new Control(carBtns.node, 'button', ['btn'], 'Remove');
-        removeBtn.node.onclick = () => console.log('REMOVE');
+        removeBtn.node.onclick = () => this.onCarRemove(this.id);
         new Control(carBtns.node, 'span', ['car-name'], this.name);
 
         const track = new Control(this.node, 'div', ['track']);
