@@ -1,12 +1,7 @@
 class Control<NodeType extends HTMLElement = HTMLElement> {
     public node: NodeType;
 
-    constructor(
-        parentNode: HTMLElement | null = null,
-        tagName: string = 'div',
-        classNames: string[] = [],
-        content: string = ''
-    ) {
+    constructor(parentNode: HTMLElement | null = null, tagName = 'div', classNames: string[] = [], content = '') {
         const elem = document.createElement(tagName);
         if (classNames.length) {
             for (let i = 0; i < classNames.length; i++) {

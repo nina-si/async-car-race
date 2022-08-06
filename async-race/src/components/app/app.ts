@@ -3,7 +3,7 @@ import Page from '../page';
 const rootElement = document.querySelector('#root') as HTMLElement;
 
 class App {
-    page!: Page;
+    page: Page;
 
     constructor() {
         this.page = new Page();

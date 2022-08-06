@@ -2,7 +2,7 @@ import Control from '../common/control';
 
 class Winners extends Control {
     constructor(parentNode: HTMLElement) {
-        super(parentNode, 'div', 'hidden', 'Winners');
+        super(parentNode, 'div', ['hidden'], 'Winners');
     }
 }
 

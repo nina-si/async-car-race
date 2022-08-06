@@ -7,14 +7,14 @@ class Header extends Control {
     onWinnersClick!: () => void;
 
     constructor(parentNode: HTMLElement) {
-        super(parentNode, 'header', 'main-header');
+        super(parentNode, 'header', ['main-header']);
         this.render();
     }
 
     render() {
-        this.garageBtn = new Control(this.node, 'button', 'btn', 'Garage');
+        this.garageBtn = new Control(this.node, 'button', ['btn'], 'Garage');
         this.garageBtn.node.onclick = () => this.onGarageClick();
-        this.winnersBtn = new Control(this.node, 'button', 'btn', 'Winners');
+        this.winnersBtn = new Control(this.node, 'button', ['btn'], 'Winners');
         this.winnersBtn.node.onclick = () => this.onWinnersClick();
     }
 }

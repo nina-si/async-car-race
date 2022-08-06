@@ -7,7 +7,7 @@ class Car extends Control {
     color: string;
 
     constructor(carData: TCar) {
-        super(null, 'div', 'car-item');
+        super(null, 'div', ['car-item']);
         this.name = carData.name;
         this.id = carData.id;
         this.color = carData.color;
