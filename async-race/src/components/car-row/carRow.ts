@@ -1,3 +1,5 @@
+import { getDriveParams, switchDriveMode } from '../../api';
+import { ANIMATION_SPEED, DRIVE_STATUS, TRACK_END, TRACK_START } from '../../constants';
 import { TCar } from '../../types';
 import Control from '../common/control';
 
@@ -8,6 +10,9 @@ class CarRow extends Control {
     carIcon!: Control<HTMLElement>;
     onCarSelect!: (carId: number, name: string, color: string) => void;
     onCarRemove!: (id: number) => void;
+    asessedDriveTime!: number;
+    isMoving!: boolean;
+    isBroken!: boolean;
 
     constructor(carData: TCar) {
         super(null, 'div', ['car-item']);
@@ -43,14 +48,52 @@ class CarRow extends Control {
         const track = new Control(this.node, 'div', ['track']);
         const controlBtns = new Control(track.node, 'div', ['control-btns']);
         const startBtn = new Control(controlBtns.node, 'button', ['btn'], 'Start');
-        startBtn.node.onclick = () => console.log('START');
+        startBtn.node.onclick = () => this.startDriving();
         const stopBtn = new Control(controlBtns.node, 'button', ['btn'], 'Stop');
-        stopBtn.node.onclick = () => console.log('STOP');
+        stopBtn.node.onclick = () => this.stopDriving();
 
         this.carIcon = new Control(track.node, 'div', ['car']);
         this.carIcon.node.innerHTML = this.renderCarImg();
         const flag = new Control(track.node, 'div', ['flag']);
         flag.node.innerHTML = '&#9872';
+    };
+
+    startDriving = async () => {
+        this.asessedDriveTime = await this.getDriveTime();
+        this.animateCar();
+        const response = await switchDriveMode(this.id);
+        if (response === 500) {
+            this.isBroken = true;
+            this.isMoving = false;
+        }
+    };
+
+    animateCar = async (): Promise<void> => {
+        if (this.asessedDriveTime) {
+            const animationStep = (TRACK_END - TRACK_START) / (this.asessedDriveTime / ANIMATION_SPEED);
+            let currentPosition = TRACK_START;
+            this.isBroken = false;
+            this.isMoving = true;
+            setInterval(() => {
+                if (this.isMoving) {
+                    if (currentPosition < TRACK_END) {
+                        currentPosition += animationStep;
+                        this.carIcon.node.style.left = `${currentPosition}%`;
+                    } else if (currentPosition >= TRACK_END) {
+                        this.isMoving = false;
+                    }
+                } else return;
+            }, ANIMATION_SPEED);
+        }
+    };
+
+    getDriveTime = async (): Promise<number> => {
+        const driveParameters = await getDriveParams(this.id, DRIVE_STATUS.STARTED);
+        return driveParameters.distance / driveParameters.velocity;
+    };
+
+    stopDriving = async () => {
+        console.log('STOP');
     };
 }
 

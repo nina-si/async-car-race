@@ -8,6 +8,16 @@ export const ENGINE_URL = `${BASE_URL}/engine`;
 
 export const CARS_PER_PAGE = 7;
 
+export const TRACK_START = 10; // начальная точка трека в % от ширины родителя
+export const TRACK_END = 91; // конечная точка трека в % от ширины родителя
+export const ANIMATION_SPEED = 10;
+
+export const DRIVE_STATUS = {
+    STARTED: 'started',
+    STOPPED: 'stopped',
+    DRIVE: 'drive',
+};
+
 export const CAR_BRANDS = [
     'Cadillac',
     'Bentley',
