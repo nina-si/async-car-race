@@ -23,3 +23,19 @@ export const CAR_BRANDS = [
     'Tesla',
     'Toyota',
 ];
+
+export const CAR_MODELS = [
+    'Model S',
+    'Mustang',
+    'Tiguan',
+    'X5',
+    'Civic',
+    'Accord',
+    'Focus',
+    'Fabia',
+    'Fusion',
+    'Fiesta',
+    'Accent',
+    'Sonata',
+    'Getz',
+];
