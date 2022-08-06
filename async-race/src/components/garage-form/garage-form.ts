@@ -11,6 +11,7 @@ class GarageForm extends Control {
     modelUpdate!: InputControl;
     colorUpdate!: InputControl;
     updateCarBtn!: Control<HTMLElement>;
+    onResetCars!: () => void;
 
     constructor(parentNode: HTMLElement) {
         super(parentNode);
@@ -48,7 +49,7 @@ class GarageForm extends Control {
         const raceBtn = new Control(this.garageBtns.node, 'button', ['btn', 'btn-race'], 'Race');
         raceBtn.node.onclick = () => console.log('RACE Started');
         const resetBtn = new Control(this.garageBtns.node, 'button', ['btn'], 'Reset');
-        resetBtn.node.onclick = () => console.log('RESET');
+        resetBtn.node.onclick = () => this.onResetCars();
         const generateCarsBtn = new Control(this.garageBtns.node, 'button', ['btn'], 'Generate Cars');
         generateCarsBtn.node.onclick = () => this.onGenerateCars();
     }
@@ -76,20 +77,3 @@ class GarageForm extends Control {
 }
 
 export default GarageForm;
-
-// <form class="create-form">
-//       <input id="car-model" class="car-model" type="text">
-//       <input id="car-color" class="car-color" type="color">
-//       <button class="btn btn-create">Create</button>
-//     </form>
-//     <form class="update-form">
-//       <input id="update-model" class="update-model" type="text">
-//       <input id="update-color" class="update-color" type="color">
-//       <button class="btn btn-update">Update</button>
-//     </form>
-//     <div class="garage-btns">
-//       <button class="btn btn-race">Race</button>
-//       <button class="btn">Reset</button>
-//       <button class="btn">Generate Cars</button>
-//     </div>
-//     <h1>Garage (${garageCars.count})</h1>

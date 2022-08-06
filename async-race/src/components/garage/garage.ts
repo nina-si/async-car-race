@@ -9,7 +9,7 @@ import GarageForm from '../garage-form';
 class Garage extends Control {
     garageCars!: TCar[];
     carsCount!: string | null;
-    carElements: HTMLElement[];
+    carElements: CarRow[];
     garageForm: GarageForm;
     carsField!: Control<HTMLElement>;
     currentPage: number;
@@ -20,6 +20,7 @@ class Garage extends Control {
         this.garageForm = new GarageForm(this.node);
         this.garageForm.onGenerateCars = () => this.generateNewCars();
         this.garageForm.onCarUpdate = () => this.updateCarsField();
+        this.garageForm.onResetCars = () => this.resetCars();
         this.carElements = [];
         this.renderCars();
     }
@@ -33,7 +34,7 @@ class Garage extends Control {
             carItem.onCarSelect = (id, name, string) => this.selectCar(id, name, string);
             carItem.onCarRemove = (id) => this.removeCarFromGarage(id);
             carItem.renderCarRow();
-            this.carElements.push(carItem.node);
+            this.carElements.push(carItem);
             this.carsField.node.appendChild(carItem.node);
         }
     };
@@ -64,6 +65,10 @@ class Garage extends Control {
     removeCarFromGarage = async (id: number) => {
         await deleteCar(id);
         this.updateCarsField();
+    };
+
+    resetCars = async () => {
+        return Promise.allSettled(this.carElements.map((car) => car.stopDriving()));
     };
 }
 
