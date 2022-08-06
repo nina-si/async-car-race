@@ -6,6 +6,8 @@ export const WINNERS_URL = `${BASE_URL}/winners`;
 
 export const ENGINE_URL = `${BASE_URL}/engine`;
 
+export const CARS_PER_PAGE = 7;
+
 export const CAR_BRANDS = [
     'Cadillac',
     'Bentley',

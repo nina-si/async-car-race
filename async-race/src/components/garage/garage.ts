@@ -1,4 +1,5 @@
 import { createCar, deleteCar, getCars } from '../../api';
+import { CARS_PER_PAGE } from '../../constants';
 import { generateNewCar } from '../../helpers';
 import { TCar } from '../../types';
 import CarRow from '../car-row';
@@ -11,9 +12,11 @@ class Garage extends Control {
     carElements: HTMLElement[];
     garageForm: GarageForm;
     carsField!: Control<HTMLElement>;
+    currentPage: number;
 
     constructor(parentNode: HTMLElement) {
         super(parentNode, 'section', ['garage'], 'Garage');
+        this.currentPage = 0;
         this.garageForm = new GarageForm(this.node);
         this.garageForm.onGenerateCars = () => this.generateNewCars();
         this.garageForm.onCarUpdate = () => this.updateCarsField();
@@ -36,7 +39,7 @@ class Garage extends Control {
     };
 
     getGarageCarsData = async () => {
-        const garageData = await getCars(0, 7);
+        const garageData = await getCars(this.currentPage, CARS_PER_PAGE);
         this.garageCars = garageData.cars;
         this.carsCount = garageData.count;
     };
