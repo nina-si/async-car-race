@@ -1,10 +1,12 @@
 import { TCar } from '../../types';
 import Control from '../common/control';
 
-class Car extends Control {
+class CarRow extends Control {
     name: string;
-    id: number | undefined;
+    id: number;
     color: string;
+    carIcon!: Control<HTMLElement>;
+    onCarSelect!: (carId: number, name: string, color: string) => void;
 
     constructor(carData: TCar) {
         super(null, 'div', ['car-item']);
@@ -29,25 +31,26 @@ class Car extends Control {
       </svg>
   `;
 
-    renderCar = (): void => {
-        this.node.innerHTML = `
-          <div class="car-btns">
-            <button class="btn btn-select" data-id="${this.id}">Select</button>
-            <button class="btn btn-remove" data-id="${this.id}">Remove</button>
-            <span class="car-name">${this.name}</span>
-          </div>
-          <div class="track">
-            <div class="control-btns">
-              <button class="btn btn-start" data-id="${this.id}">Start</button>
-              <button class="btn btn-stop" data-id="${this.id}">Stop</button>
-            </div>
-            <div class="car" id="car-${this.id}" data-id="${this.id}">
-              ${this.renderCarImg()}
-            </div>
-            <div class="flag" id="flag-1">&#9872</div>
-          </div>
-        `;
+    renderCarRow = (): void => {
+        const carBtns = new Control(this.node, 'div', ['car-btns']);
+        const selectBtn = new Control(carBtns.node, 'button', ['btn'], 'Select');
+        selectBtn.node.onclick = () => this.onCarSelect(this.id, this.name, this.color);
+        const removeBtn = new Control(carBtns.node, 'button', ['btn'], 'Remove');
+        removeBtn.node.onclick = () => console.log('REMOVE');
+        new Control(carBtns.node, 'span', ['car-name'], this.name);
+
+        const track = new Control(this.node, 'div', ['track']);
+        const controlBtns = new Control(track.node, 'div', ['control-btns']);
+        const startBtn = new Control(controlBtns.node, 'button', ['btn'], 'Start');
+        startBtn.node.onclick = () => console.log('START');
+        const stopBtn = new Control(controlBtns.node, 'button', ['btn'], 'Stop');
+        stopBtn.node.onclick = () => console.log('STOP');
+
+        this.carIcon = new Control(track.node, 'div', ['car']);
+        this.carIcon.node.innerHTML = this.renderCarImg();
+        const flag = new Control(track.node, 'div', ['flag']);
+        flag.node.innerHTML = '&#9872';
     };
 }
 
-export default Car;
+export default CarRow;

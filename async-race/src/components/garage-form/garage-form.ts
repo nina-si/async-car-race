@@ -1,3 +1,4 @@
+import { updateCar } from '../../api';
 import Control from '../common/control';
 import InputControl from '../common/input-control';
 
@@ -6,6 +7,10 @@ class GarageForm extends Control {
     createForm!: Control<HTMLElement>;
     updateForm!: Control<HTMLElement>;
     onGenerateCars!: () => void;
+    onCarUpdate!: () => void;
+    modelUpdate!: InputControl;
+    colorUpdate!: InputControl;
+    updateCarBtn!: Control<HTMLElement>;
 
     constructor(parentNode: HTMLElement) {
         super(parentNode);
@@ -31,21 +36,12 @@ class GarageForm extends Control {
         };
     }
 
-    renderUpdateForm(carName?: string, carColor?: string) {
+    renderUpdateForm() {
         this.updateForm.node.innerHTML = '';
-        const modelInput = new InputControl('text', this.createForm.node, ['update-model'], 'update-model');
-        if (carName) (modelInput.node as HTMLInputElement).value = carName;
-        const colorInput = new InputControl('color', this.createForm.node, ['update-color'], 'update-color');
-        if (carColor) (colorInput.node as HTMLInputElement).value = carColor;
-        const updateCarBtn = new Control(this.createForm.node, 'button', ['btn', 'btn-update'], 'Update');
-        updateCarBtn.node.onclick = (e) => {
-            e.preventDefault();
-            console.log(
-                (modelInput.node as HTMLInputElement).value,
-                (colorInput.node as HTMLInputElement).value,
-                'UPDATE'
-            );
-        };
+        this.modelUpdate = new InputControl('text', this.updateForm.node, ['update-model'], 'update-model');
+        this.colorUpdate = new InputControl('color', this.updateForm.node, ['update-color'], 'update-color');
+        this.updateCarBtn = new Control(this.updateForm.node, 'button', ['btn', 'btn-update'], 'Update');
+        (this.updateCarBtn.node as HTMLButtonElement).disabled = true;
     }
 
     renderGarageBtns() {
@@ -55,6 +51,27 @@ class GarageForm extends Control {
         resetBtn.node.onclick = () => console.log('RESET');
         const generateCarsBtn = new Control(this.garageBtns.node, 'button', ['btn'], 'Generate Cars');
         generateCarsBtn.node.onclick = () => this.onGenerateCars();
+    }
+
+    fillUpdateForm(id: number, carName?: string, carColor?: string) {
+        if (carName) (this.modelUpdate.node as HTMLInputElement).value = carName;
+        if (carColor) (this.colorUpdate.node as HTMLInputElement).value = carColor;
+        (this.updateCarBtn.node as HTMLButtonElement).disabled = false;
+        this.updateCarBtn.node.onclick = async (e) => {
+            e.preventDefault();
+            console.log(
+                (this.modelUpdate.node as HTMLInputElement).value,
+                (this.colorUpdate.node as HTMLInputElement).value,
+                id,
+                'UPDATE'
+            );
+            await updateCar(id, {
+                name: (this.modelUpdate.node as HTMLInputElement).value,
+                color: (this.colorUpdate.node as HTMLInputElement).value,
+            });
+            this.onCarUpdate();
+            this.renderUpdateForm();
+        };
     }
 }
 

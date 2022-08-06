@@ -1,7 +1,7 @@
 import { createCar, getCars } from '../../api';
 import { generateNewCar } from '../../helpers';
 import { TCar } from '../../types';
-import Car from '../car';
+import CarRow from '../car-row';
 import Control from '../common/control';
 import GarageForm from '../garage-form';
 
@@ -13,21 +13,22 @@ class Garage extends Control {
     carsField!: Control<HTMLElement>;
 
     constructor(parentNode: HTMLElement) {
-        super(parentNode, 'div', [], 'Garage');
+        super(parentNode, 'section', ['garage'], 'Garage');
         this.garageForm = new GarageForm(this.node);
         this.garageForm.onGenerateCars = () => this.generateNewCars();
+        this.garageForm.onCarUpdate = () => this.updateCarsField();
         this.carElements = [];
         this.renderCars();
     }
 
     renderCars = async () => {
         await this.getGarageCarsData();
-        console.log(this.garageCars, this.carsCount);
         this.carsField = new Control(this.node, 'div', ['cars-list']);
 
         for (let i = 0; i < this.garageCars.length; i++) {
-            const carItem = new Car(this.garageCars[i]);
-            carItem.renderCar();
+            const carItem = new CarRow(this.garageCars[i]);
+            carItem.onCarSelect = (id, name, string) => this.selectCar(id, name, string);
+            carItem.renderCarRow();
             this.carElements.push(carItem.node);
             this.carsField.node.appendChild(carItem.node);
         }
@@ -51,6 +52,10 @@ class Garage extends Control {
         }
         Promise.allSettled(newCarsData.map((newCar) => createCar(newCar))).then(() => this.updateCarsField());
     };
+
+    selectCar(id: number, name: string, color: string) {
+        this.garageForm.fillUpdateForm(id, name, color);
+    }
 }
 
 export default Garage;
