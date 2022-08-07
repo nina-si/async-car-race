@@ -1,4 +1,4 @@
-import { createCar, deleteCar, getCars } from '../../api';
+import { createCar, createNewWinner, deleteCar, getCars, getWinnerData, updateWinner } from '../../api';
 import { CARS_PER_PAGE } from '../../constants';
 import { generateNewCar } from '../../helpers';
 import { TCar } from '../../types';
@@ -69,13 +69,27 @@ class Garage extends Control {
     };
 
     startRace = async () => {
-        Promise.any(this.carElements.map((car) => car.startRace())).then((data) =>
-            console.log(`WINNER IS ${data.id} with time ${data.time}`)
-        );
+        Promise.any(this.carElements.map((car) => car.startRace())).then((data) => {
+            console.log(`WINNER IS ${data.id} with time ${data.time}`);
+            this.updateWinnerRecord(data.id, data.time);
+        });
     };
 
     resetCars = async () => {
         return Promise.allSettled(this.carElements.map((car) => car.stopDriving()));
+    };
+
+    updateWinnerRecord = async (id: number, time: number) => {
+        const prevRecord = await getWinnerData(id);
+        if (!prevRecord.length) {
+            const newRecord = { id, wins: 1, time };
+            await createNewWinner(newRecord);
+        } else if (prevRecord.length) {
+            const prevRecordData = prevRecord[0];
+            const bestTime = prevRecordData.time < time ? prevRecordData.time : time;
+            const newRecord = { wins: prevRecordData.wins + 1, time: bestTime };
+            await updateWinner(id, newRecord);
+        }
     };
 }
 

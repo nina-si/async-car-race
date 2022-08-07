@@ -1,6 +1,6 @@
-import { TCar } from './types';
+import { TCar, TWinner } from './types';
 
-import { DRIVE_STATUS, ENGINE_URL, GARAGE_URL } from './constants';
+import { DRIVE_STATUS, ENGINE_URL, GARAGE_URL, WINNERS_URL } from './constants';
 
 export const getCars = async (page: number, limit: number): Promise<{ cars: TCar[] | []; count: string | null }> => {
     const result = await fetch(`${GARAGE_URL}?_page=${page}&_limit=${limit}`);
@@ -74,3 +74,35 @@ export const stopEngine = async (id: number) => {
 
     return result;
 };
+
+export const getWinnerData = async (id: number) => {
+    try {
+        const result = (await fetch(`${WINNERS_URL}?id=${id}`)).json();
+        return result;
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const createNewWinner = async (body: TWinner) => {
+    (
+        await fetch(WINNERS_URL, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+    ).json();
+};
+
+export const updateWinner = async (id: number, body: { wins: number; time: number }) =>
+    (
+        await fetch(`${WINNERS_URL}/${id}`, {
+            method: 'PUT',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+    ).json();

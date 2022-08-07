@@ -110,7 +110,8 @@ class CarRow extends Control {
         const result = await this.startDriving();
 
         if (result === 200) {
-            return { id: this.id, time: (new Date().getTime() - startTime) / 1000 };
+            const finishTime = new Date().getTime();
+            return { id: this.id, time: Number(((finishTime - startTime) / 1000).toFixed(2)) };
         } else throw new Error(`Car № ${this.id} didn't finish`);
     };
 }
