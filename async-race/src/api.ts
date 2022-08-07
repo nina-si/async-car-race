@@ -106,3 +106,12 @@ export const updateWinner = async (id: number, body: { wins: number; time: numbe
             },
         })
     ).json();
+
+export const getWinners = async (page: number, limit: number, sort: string, order: string) => {
+    const result = await fetch(`${WINNERS_URL}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`);
+
+    return {
+        winners: await result.json(),
+        count: result.headers.get('X-Total-Count'),
+    };
+};

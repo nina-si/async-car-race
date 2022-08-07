@@ -7,6 +7,7 @@ export const WINNERS_URL = `${BASE_URL}/winners`;
 export const ENGINE_URL = `${BASE_URL}/engine`;
 
 export const CARS_PER_PAGE = 7;
+export const WINNERS_PER_PAGE = 10;
 
 export const TRACK_START = 10; // начальная точка трека в % от ширины родителя
 export const TRACK_END = 91; // конечная точка трека в % от ширины родителя
@@ -16,6 +17,17 @@ export const DRIVE_STATUS = {
     STARTED: 'started',
     STOPPED: 'stopped',
     DRIVE: 'drive',
+};
+
+export const SORT_TYPE = {
+    ID: 'ids',
+    WINS: 'wins',
+    TIME: 'time',
+};
+
+export const SORT_ORDER = {
+    ASC: 'ASC',
+    DESC: 'DESC',
 };
 
 export const CAR_BRANDS = [
