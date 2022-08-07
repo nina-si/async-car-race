@@ -13,6 +13,7 @@ class Garage extends Control {
     garageForm: GarageForm;
     carsField!: Control<HTMLElement>;
     currentPage: number;
+    onNewRecord!: () => void;
 
     constructor(parentNode: HTMLElement) {
         super(parentNode, 'section', ['garage'], 'Garage');
@@ -84,11 +85,13 @@ class Garage extends Control {
         if (!prevRecord.length) {
             const newRecord = { id, wins: 1, time };
             await createNewWinner(newRecord);
+            this.onNewRecord();
         } else if (prevRecord.length) {
             const prevRecordData = prevRecord[0];
             const bestTime = prevRecordData.time < time ? prevRecordData.time : time;
             const newRecord = { wins: prevRecordData.wins + 1, time: bestTime };
             await updateWinner(id, newRecord);
+            this.onNewRecord();
         }
     };
 }

@@ -13,6 +13,7 @@ class Page extends Control {
         this.header = new Header(this.node);
         this.garage = new Garage(this.node);
         this.winners = new Winners(this.node);
+        this.garage.onNewRecord = () => this.winners.updateWinners();
         this.header.onGarageClick = () => this.showGarageView();
         this.header.onWinnersClick = () => this.showWinnersView();
     }
