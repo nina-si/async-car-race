@@ -4,8 +4,14 @@ export type TCar = {
     id: number;
 };
 
-export type TWinner = {
+export type TWinnerData = {
     id: number;
     wins: number;
+    time: number;
+};
+
+export type TWinner = {
+    id: number;
+    name: string;
     time: number;
 };
