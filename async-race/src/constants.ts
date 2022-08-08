@@ -20,7 +20,7 @@ export const DRIVE_STATUS = {
 };
 
 export const SORT_TYPE = {
-    ID: 'ids',
+    ID: 'id',
     WINS: 'wins',
     TIME: 'time',
 };
