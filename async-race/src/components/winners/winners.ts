@@ -73,14 +73,18 @@ class Winners extends Control {
         this.bestTimeHeader = new Control(null, 'td', [], 'Best time in secs');
         this.winsHeader.node.onclick = () => this.handleSortingChange(SORT_TYPE.WINS);
         this.bestTimeHeader.node.onclick = () => this.handleSortingChange(SORT_TYPE.TIME);
+        if (this.sortType === SORT_TYPE.ID) {
+            this.winsHeader.node.textContent = 'Wins number ↕️';
+            this.bestTimeHeader.node.textContent = 'Best time in secs ↕️';
+        }
         if (this.sortType === SORT_TYPE.TIME) {
-            this.winsHeader.node.textContent = 'Wins number';
+            this.winsHeader.node.textContent = 'Wins number ↕️';
             this.bestTimeHeader.node.textContent = `Best time in secs ${
                 this.sortOrder === SORT_ORDER.ASC ? '⬆️' : '⬇️'
             }`;
         }
         if (this.sortType === SORT_TYPE.WINS) {
-            this.bestTimeHeader.node.textContent = 'Best time in secs';
+            this.bestTimeHeader.node.textContent = 'Best time in secs ↕️';
             this.winsHeader.node.textContent = `Wins number ${this.sortOrder === SORT_ORDER.ASC ? '⬆️' : '⬇️'}`;
         }
         headerRow.node.append(id.node, image.node, car.node, this.winsHeader.node, this.bestTimeHeader.node);
