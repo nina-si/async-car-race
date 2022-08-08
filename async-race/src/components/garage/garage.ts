@@ -1,4 +1,12 @@
-import { createCar, createNewWinner, deleteCar, getCars, getWinnerData, updateWinner } from '../../api';
+import {
+    createCar,
+    createNewWinner,
+    deleteCar,
+    deleteCarFromWinners,
+    getCars,
+    getWinnerData,
+    updateWinner,
+} from '../../api';
 import { CARS_PER_PAGE } from '../../constants';
 import { generateNewCar } from '../../helpers';
 import { TCar, TWinner } from '../../types';
@@ -16,11 +24,11 @@ class Garage extends Control {
     garageForm: GarageForm;
     carsField!: Control<HTMLElement>;
     currentPage: number;
-    onNewRecord!: () => void;
     lastPage: number;
     pagination!: Pagination;
     garageHeader!: Control<HTMLElement>;
     winnerModal!: Control<HTMLElement>;
+    onCarDataUpdate!: () => void;
 
     constructor(parentNode: HTMLElement) {
         super(parentNode, 'section', ['garage'], 'Garage');
@@ -30,7 +38,10 @@ class Garage extends Control {
         this.garageForm = new GarageForm(this.node);
         this.garageHeader = new Control(this.node, 'h2', ['garage-header']);
         this.garageForm.onGenerateCars = () => this.generateNewCars();
-        this.garageForm.onCarUpdate = () => this.updateCarsField();
+        this.garageForm.onCarUpdate = () => {
+            this.updateCarsField();
+            this.onCarDataUpdate();
+        };
         this.garageForm.onStartRace = () => this.startRace();
         this.garageForm.onResetCars = () => this.resetCars();
         this.garageForm.onCarAdd = () => this.updateCarsField();
@@ -82,7 +93,9 @@ class Garage extends Control {
 
     removeCarFromGarage = async (id: number) => {
         await deleteCar(id);
+        await deleteCarFromWinners(id);
         this.updateCarsField();
+        this.onCarDataUpdate();
     };
 
     startRace = async () => {
@@ -103,13 +116,13 @@ class Garage extends Control {
         if (!prevRecord.length) {
             const newRecord = { id, wins: 1, time };
             await createNewWinner(newRecord);
-            this.onNewRecord();
+            this.onCarDataUpdate();
         } else if (prevRecord.length) {
             const prevRecordData = prevRecord[0];
             const bestTime = prevRecordData.time < time ? prevRecordData.time : time;
             const newRecord = { wins: prevRecordData.wins + 1, time: bestTime };
             await updateWinner(id, newRecord);
-            this.onNewRecord();
+            this.onCarDataUpdate();
         }
     };
 
@@ -121,7 +134,7 @@ class Garage extends Control {
     displayWinnerModal = (name: string, time: number) => {
         this.winnerModal.node.textContent = `${name.toUpperCase()} won with result ${time}s`;
         this.winnerModal.node.classList.add('winner-modal--visible');
-        setTimeout(() => this.winnerModal.node.classList.remove('winner-modal--visible'), 4000);
+        setTimeout(() => this.winnerModal.node.classList.remove('winner-modal--visible'), 3000);
     };
 }
 

@@ -46,6 +46,14 @@ export const deleteCar = async (id: number) => {
     ).json();
 };
 
+export const deleteCarFromWinners = async (id: number) => {
+    (
+        await fetch(`${WINNERS_URL}/${id}`, {
+            method: 'DELETE',
+        })
+    ).json();
+};
+
 export const getDriveParams = async (id: number, status: string) => {
     const result = (
         await fetch(`${ENGINE_URL}?id=${id}&status=${status}`, {
