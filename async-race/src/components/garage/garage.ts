@@ -24,6 +24,7 @@ class Garage extends Control {
         this.currentPage = 1;
         this.lastPage = 1;
         this.garageForm = new GarageForm(this.node);
+        this.garageHeader = new Control(this.node, 'h2', ['garage-header']);
         this.garageForm.onGenerateCars = () => this.generateNewCars();
         this.garageForm.onCarUpdate = () => this.updateCarsField();
         this.garageForm.onStartRace = () => this.startRace();
@@ -33,7 +34,7 @@ class Garage extends Control {
 
     renderCarsField = async () => {
         await this.getGarageCarsData();
-        this.garageHeader = new Control(this.node, 'h2', ['garage-header'], `Garage (${this.carsCount})`);
+        this.garageHeader.node.textContent = `Garage (${this.carsCount})`;
         this.carsField = new Control(this.node, 'div', ['cars-list']);
 
         this.carElements = [];
