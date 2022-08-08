@@ -131,6 +131,7 @@ class Garage extends Control {
 
     changePage = (currentPage: number) => {
         this.currentPage = currentPage;
+        this.garageForm.reset();
         this.updateCarsField();
     };
 

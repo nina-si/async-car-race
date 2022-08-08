@@ -91,6 +91,11 @@ class GarageForm extends Control {
     setReadyToRace = () => {
         this.raceBtn.node.disabled = false;
     };
+
+    reset = () => {
+        this.setReadyToRace();
+        this.renderUpdateForm();
+    };
 }
 
 export default GarageForm;
