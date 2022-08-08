@@ -13,14 +13,9 @@ class CarRow extends Control {
     onCarRemove!: (id: number) => void;
     asessedDriveTime!: number;
     isMoving!: boolean;
-    isBroken!: boolean;
-    isStopped!: boolean;
-    onStart: boolean;
     startBtn!: Control<HTMLButtonElement>;
     stopBtn!: Control<HTMLButtonElement>;
     onReturnToStart!: () => void;
-    isFinished!: boolean;
-    isCancelled!: boolean;
     controller!: AbortController;
 
     constructor(carData: TCar) {
@@ -28,7 +23,6 @@ class CarRow extends Control {
         this.name = carData.name;
         this.id = carData.id;
         this.color = carData.color;
-        this.onStart = true;
     }
 
     renderCarRow = (): void => {
@@ -54,27 +48,21 @@ class CarRow extends Control {
     };
 
     startDriving = async () => {
-        this.onStart = false;
-        this.isCancelled = false;
         this.startBtn.node.disabled = true;
         this.asessedDriveTime = await this.getDriveTime();
         this.stopBtn.node.disabled = false;
-        this.isStopped = false;
         this.animateCar();
         const response = await switchDriveMode(this.id, this.controller.signal);
-        if (response === 500 && !this.isStopped) {
-            this.isBroken = true;
+        if (response === 500) {
             this.isMoving = false;
         }
         return response;
     };
 
     animateCar = async (): Promise<void> => {
-        this.isFinished = false;
         if (this.asessedDriveTime) {
             const animationStep = (TRACK_END - TRACK_START) / (this.asessedDriveTime / ANIMATION_SPEED);
             let currentPosition = TRACK_START;
-            this.isBroken = false;
             this.isMoving = true;
             const animationInterval = setInterval(() => {
                 if (this.isMoving) {
@@ -83,7 +71,6 @@ class CarRow extends Control {
                         this.carIcon.node.style.left = `${currentPosition}%`;
                     } else if (currentPosition >= TRACK_END) {
                         this.isMoving = false;
-                        this.isFinished = true;
                         clearInterval(animationInterval);
                     }
                 } else clearInterval(animationInterval);
@@ -99,12 +86,8 @@ class CarRow extends Control {
     stopDriving = async () => {
         this.stopBtn.node.disabled = true;
         if (this.controller) this.controller.abort();
-        this.isCancelled = true;
-        this.onStart = true;
         await stopEngine(this.id);
         this.isMoving = false;
-        this.isBroken = false;
-        this.isStopped = true;
         this.carIcon.node.style.left = `${TRACK_START}%`;
         this.startBtn.node.disabled = false;
         this.onReturnToStart();
