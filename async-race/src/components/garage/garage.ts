@@ -5,6 +5,7 @@ import { TCar } from '../../types';
 import CarRow from '../car-row';
 import Control from '../common/control';
 import GarageForm from '../garage-form';
+import Pagination from '../pagination';
 
 class Garage extends Control {
     garageCars!: TCar[];
@@ -14,20 +15,23 @@ class Garage extends Control {
     carsField!: Control<HTMLElement>;
     currentPage: number;
     onNewRecord!: () => void;
+    lastPage: number;
+    pagination!: Pagination;
 
     constructor(parentNode: HTMLElement) {
         super(parentNode, 'section', ['garage'], 'Garage');
-        this.currentPage = 0;
+        this.currentPage = 1;
+        this.lastPage = 1;
         this.garageForm = new GarageForm(this.node);
         this.garageForm.onGenerateCars = () => this.generateNewCars();
         this.garageForm.onCarUpdate = () => this.updateCarsField();
         this.garageForm.onStartRace = () => this.startRace();
         this.garageForm.onResetCars = () => this.resetCars();
         this.carElements = [];
-        this.renderCars();
+        this.renderCarsField();
     }
 
-    renderCars = async () => {
+    renderCarsField = async () => {
         await this.getGarageCarsData();
         this.carsField = new Control(this.node, 'div', ['cars-list']);
 
@@ -39,17 +43,21 @@ class Garage extends Control {
             this.carElements.push(carItem);
             this.carsField.node.appendChild(carItem.node);
         }
+        this.pagination = new Pagination(this.node, this.currentPage, this.lastPage);
+        this.pagination.onPageChange = (currentPage) => this.changePage(currentPage);
     };
 
     getGarageCarsData = async () => {
         const garageData = await getCars(this.currentPage, CARS_PER_PAGE);
         this.garageCars = garageData.cars;
         this.carsCount = garageData.count;
+        this.lastPage = Math.ceil(Number(this.carsCount) / CARS_PER_PAGE);
     };
 
     updateCarsField = () => {
         this.carsField.destroy();
-        this.renderCars();
+        this.pagination.destroy();
+        this.renderCarsField();
     };
 
     generateNewCars = async () => {
@@ -93,6 +101,11 @@ class Garage extends Control {
             await updateWinner(id, newRecord);
             this.onNewRecord();
         }
+    };
+
+    changePage = (currentPage: number) => {
+        this.currentPage = currentPage;
+        this.updateCarsField();
     };
 }
 
