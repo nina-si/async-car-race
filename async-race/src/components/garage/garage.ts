@@ -10,7 +10,7 @@ import Pagination from '../pagination';
 class Garage extends Control {
     garageCars!: TCar[];
     carsCount!: string | null;
-    carElements: CarRow[];
+    carElements!: CarRow[];
     garageForm: GarageForm;
     carsField!: Control<HTMLElement>;
     currentPage: number;
@@ -28,7 +28,6 @@ class Garage extends Control {
         this.garageForm.onCarUpdate = () => this.updateCarsField();
         this.garageForm.onStartRace = () => this.startRace();
         this.garageForm.onResetCars = () => this.resetCars();
-        this.carElements = [];
         this.renderCarsField();
     }
 
@@ -37,6 +36,7 @@ class Garage extends Control {
         this.garageHeader = new Control(this.node, 'h2', ['garage-header'], `Garage (${this.carsCount})`);
         this.carsField = new Control(this.node, 'div', ['cars-list']);
 
+        this.carElements = [];
         for (let i = 0; i < this.garageCars.length; i++) {
             const carItem = new CarRow(this.garageCars[i]);
             carItem.onCarSelect = (id, name, string) => this.selectCar(id, name, string);
