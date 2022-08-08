@@ -29,6 +29,7 @@ class Garage extends Control {
         this.garageForm.onCarUpdate = () => this.updateCarsField();
         this.garageForm.onStartRace = () => this.startRace();
         this.garageForm.onResetCars = () => this.resetCars();
+        this.garageForm.onCarAdd = () => this.updateCarsField();
         this.renderCarsField();
     }
 
@@ -58,7 +59,6 @@ class Garage extends Control {
     };
 
     updateCarsField = () => {
-        this.garageHeader.destroy();
         this.carsField.destroy();
         this.pagination.destroy();
         this.renderCarsField();

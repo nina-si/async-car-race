@@ -1,4 +1,4 @@
-import { updateCar } from '../../api';
+import { createCar, updateCar } from '../../api';
 import Control from '../common/control';
 import InputControl from '../common/input-control';
 
@@ -13,6 +13,9 @@ class GarageForm extends Control {
     updateCarBtn!: Control<HTMLElement>;
     onResetCars!: () => void;
     onStartRace!: () => void;
+    modelInput!: InputControl;
+    colorInput!: InputControl;
+    onCarAdd!: () => void;
 
     constructor(parentNode: HTMLElement) {
         super(parentNode);
@@ -29,12 +32,12 @@ class GarageForm extends Control {
     }
 
     renderCreateForm() {
-        const modelInput = new InputControl('text', this.createForm.node, ['car-model'], 'car-model');
-        const colorInput = new InputControl('color', this.createForm.node, ['car-color'], 'car-color');
+        this.modelInput = new InputControl('text', this.createForm.node, ['car-model'], 'car-model');
+        this.colorInput = new InputControl('color', this.createForm.node, ['car-color'], 'car-color');
         const createCarBtn = new Control(this.createForm.node, 'button', ['btn', 'btn-create'], 'Create');
         createCarBtn.node.onclick = (e) => {
             e.preventDefault();
-            console.log((modelInput.node as HTMLInputElement).value, (colorInput.node as HTMLInputElement).value);
+            this.handleCreateCar();
         };
     }
 
@@ -61,12 +64,6 @@ class GarageForm extends Control {
         (this.updateCarBtn.node as HTMLButtonElement).disabled = false;
         this.updateCarBtn.node.onclick = async (e) => {
             e.preventDefault();
-            console.log(
-                (this.modelUpdate.node as HTMLInputElement).value,
-                (this.colorUpdate.node as HTMLInputElement).value,
-                id,
-                'UPDATE'
-            );
             await updateCar(id, {
                 name: (this.modelUpdate.node as HTMLInputElement).value,
                 color: (this.colorUpdate.node as HTMLInputElement).value,
@@ -75,6 +72,16 @@ class GarageForm extends Control {
             this.renderUpdateForm();
         };
     }
+
+    handleCreateCar = async () => {
+        const color = (this.colorInput.node as HTMLInputElement).value;
+        const nameValue = (this.modelInput.node as HTMLInputElement).value;
+        const newName = nameValue.length ? nameValue : 'Noname car';
+        await createCar({ name: newName, color });
+        (this.modelInput.node as HTMLInputElement).value = '';
+        (this.colorInput.node as HTMLInputElement).value = '#000000';
+        this.onCarAdd();
+    };
 }
 
 export default GarageForm;
