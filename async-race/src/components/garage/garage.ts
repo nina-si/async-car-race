@@ -17,6 +17,7 @@ class Garage extends Control {
     onNewRecord!: () => void;
     lastPage: number;
     pagination!: Pagination;
+    garageHeader!: Control<HTMLElement>;
 
     constructor(parentNode: HTMLElement) {
         super(parentNode, 'section', ['garage'], 'Garage');
@@ -33,6 +34,7 @@ class Garage extends Control {
 
     renderCarsField = async () => {
         await this.getGarageCarsData();
+        this.garageHeader = new Control(this.node, 'h2', ['garage-header'], `Garage (${this.carsCount})`);
         this.carsField = new Control(this.node, 'div', ['cars-list']);
 
         for (let i = 0; i < this.garageCars.length; i++) {
@@ -55,6 +57,7 @@ class Garage extends Control {
     };
 
     updateCarsField = () => {
+        this.garageHeader.destroy();
         this.carsField.destroy();
         this.pagination.destroy();
         this.renderCarsField();
