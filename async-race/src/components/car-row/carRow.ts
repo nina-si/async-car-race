@@ -111,7 +111,7 @@ class CarRow extends Control {
 
         if (result === 200) {
             const finishTime = new Date().getTime();
-            return { id: this.id, time: Number(((finishTime - startTime) / 1000).toFixed(2)) };
+            return { id: this.id, time: Number(((finishTime - startTime) / 1000).toFixed(2)), name: this.name };
         } else throw new Error(`Car № ${this.id} didn't finish`);
     };
 }

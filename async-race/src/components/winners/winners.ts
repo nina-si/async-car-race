@@ -1,6 +1,6 @@
 import { getWinners } from '../../api';
 import { SORT_ORDER, SORT_TYPE, WINNERS_PER_PAGE } from '../../constants';
-import { TWinner } from '../../types';
+import { TWinnerData } from '../../types';
 import Control from '../common/control';
 import Pagination from '../pagination';
 import WinnerRecord from '../winner-record';
@@ -11,7 +11,7 @@ class Winners extends Control {
     sortType: string;
     sortOrder: string;
     winnersCount!: string | null;
-    winnersData!: TWinner[];
+    winnersData!: TWinnerData[];
     winnersTable!: Control<HTMLElement>;
     pagination!: Pagination;
     lastPage: number;

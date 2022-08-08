@@ -1,4 +1,4 @@
-import { TCar, TWinner } from './types';
+import { TCar, TWinnerData } from './types';
 
 import { DRIVE_STATUS, ENGINE_URL, GARAGE_URL, WINNERS_URL } from './constants';
 
@@ -84,7 +84,7 @@ export const getWinnerData = async (id: number) => {
     }
 };
 
-export const createNewWinner = async (body: TWinner) => {
+export const createNewWinner = async (body: TWinnerData) => {
     (
         await fetch(WINNERS_URL, {
             method: 'POST',

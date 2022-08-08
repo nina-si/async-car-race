@@ -1,6 +1,6 @@
 import { getCarInfo } from '../../api';
 import { renderCarImg } from '../../helpers';
-import { TWinner } from '../../types';
+import { TWinnerData } from '../../types';
 import Control from '../common/control';
 
 class WinnerRecord extends Control {
@@ -10,7 +10,7 @@ class WinnerRecord extends Control {
     name!: string;
     color!: string;
 
-    constructor(parentNode: HTMLElement, winner: TWinner) {
+    constructor(parentNode: HTMLElement, winner: TWinnerData) {
         super(parentNode, 'tr', ['winner-record']);
         this.id = winner.id;
         this.wins = winner.wins;

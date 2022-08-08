@@ -1,11 +1,13 @@
 import { createCar, createNewWinner, deleteCar, getCars, getWinnerData, updateWinner } from '../../api';
 import { CARS_PER_PAGE } from '../../constants';
 import { generateNewCar } from '../../helpers';
-import { TCar } from '../../types';
+import { TCar, TWinner } from '../../types';
 import CarRow from '../car-row';
 import Control from '../common/control';
 import GarageForm from '../garage-form';
 import Pagination from '../pagination';
+
+import './garage.styles.scss';
 
 class Garage extends Control {
     garageCars!: TCar[];
@@ -18,11 +20,13 @@ class Garage extends Control {
     lastPage: number;
     pagination!: Pagination;
     garageHeader!: Control<HTMLElement>;
+    winnerModal!: Control<HTMLElement>;
 
     constructor(parentNode: HTMLElement) {
         super(parentNode, 'section', ['garage'], 'Garage');
         this.currentPage = 1;
         this.lastPage = 1;
+        this.winnerModal = new Control(this.node, 'div', ['winner-modal']);
         this.garageForm = new GarageForm(this.node);
         this.garageHeader = new Control(this.node, 'h2', ['garage-header']);
         this.garageForm.onGenerateCars = () => this.generateNewCars();
@@ -84,7 +88,7 @@ class Garage extends Control {
     startRace = async () => {
         Promise.any(this.carElements.map((car) => car.startRace())).then((data) => {
             console.log(`WINNER IS ${data.id} with time ${data.time}`);
-            this.updateWinnerRecord(data.id, data.time);
+            this.updateWinnerRecord(data);
         });
     };
 
@@ -92,7 +96,9 @@ class Garage extends Control {
         return Promise.allSettled(this.carElements.map((car) => car.stopDriving()));
     };
 
-    updateWinnerRecord = async (id: number, time: number) => {
+    updateWinnerRecord = async (data: TWinner) => {
+        const { id, name, time } = data;
+        this.displayWinnerModal(name, time);
         const prevRecord = await getWinnerData(id);
         if (!prevRecord.length) {
             const newRecord = { id, wins: 1, time };
@@ -110,6 +116,12 @@ class Garage extends Control {
     changePage = (currentPage: number) => {
         this.currentPage = currentPage;
         this.updateCarsField();
+    };
+
+    displayWinnerModal = (name: string, time: number) => {
+        this.winnerModal.node.textContent = `${name.toUpperCase()} won with result ${time}s`;
+        this.winnerModal.node.classList.add('winner-modal--visible');
+        setTimeout(() => this.winnerModal.node.classList.remove('winner-modal--visible'), 4000);
     };
 }
 
