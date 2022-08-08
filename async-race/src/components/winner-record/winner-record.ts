@@ -20,7 +20,6 @@ class WinnerRecord extends Control {
     render = async () => {
         await this.getCarData();
         const idCell = new Control(null, 'td', [], this.id.toString());
-        console.log(this.color, 'COLOR');
         const imageCell = new Control(this.node, 'div', []);
         imageCell.node.innerHTML = renderCarImg(this.color);
         const nameCell = new Control(null, 'td', [], this.name);

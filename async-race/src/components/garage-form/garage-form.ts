@@ -16,6 +16,8 @@ class GarageForm extends Control {
     modelInput!: InputControl;
     colorInput!: InputControl;
     onCarAdd!: () => void;
+    raceBtn!: Control<HTMLButtonElement>;
+    resetBtn!: Control<HTMLButtonElement>;
 
     constructor(parentNode: HTMLElement) {
         super(parentNode);
@@ -50,10 +52,13 @@ class GarageForm extends Control {
     }
 
     renderGarageBtns() {
-        const raceBtn = new Control(this.garageBtns.node, 'button', ['btn', 'btn-race'], 'Race');
-        raceBtn.node.onclick = () => this.onStartRace();
-        const resetBtn = new Control(this.garageBtns.node, 'button', ['btn'], 'Reset');
-        resetBtn.node.onclick = () => this.onResetCars();
+        this.raceBtn = new Control(this.garageBtns.node, 'button', ['btn', 'btn-race'], 'Race');
+        this.raceBtn.node.onclick = () => {
+            this.raceBtn.node.disabled = true;
+            this.onStartRace();
+        };
+        this.resetBtn = new Control(this.garageBtns.node, 'button', ['btn'], 'Reset');
+        this.resetBtn.node.onclick = () => this.onResetCars();
         const generateCarsBtn = new Control(this.garageBtns.node, 'button', ['btn'], 'Generate Cars');
         generateCarsBtn.node.onclick = () => this.onGenerateCars();
     }
@@ -81,6 +86,10 @@ class GarageForm extends Control {
         (this.modelInput.node as HTMLInputElement).value = '';
         (this.colorInput.node as HTMLInputElement).value = '#000000';
         this.onCarAdd();
+    };
+
+    setReadyToRace = () => {
+        this.raceBtn.node.disabled = false;
     };
 }
 

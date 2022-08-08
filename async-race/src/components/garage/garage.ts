@@ -59,6 +59,7 @@ class Garage extends Control {
             carItem.onCarSelect = (id, name, string) => this.selectCar(id, name, string);
             carItem.onCarRemove = (id) => this.removeCarFromGarage(id);
             carItem.renderCarRow();
+            carItem.onReturnToStart = () => this.checkIfReadyToRace();
             this.carElements.push(carItem);
             this.carsField.node.appendChild(carItem.node);
         }
@@ -99,10 +100,12 @@ class Garage extends Control {
     };
 
     startRace = async () => {
-        Promise.any(this.carElements.map((car) => car.startRace())).then((data) => {
-            console.log(`WINNER IS ${data.id} with time ${data.time}`);
-            this.updateWinnerRecord(data);
-        });
+        const controller = new AbortController();
+        Promise.any(this.carElements.map((car) => car.startRace(controller)))
+            .then((data) => {
+                this.updateWinnerRecord(data);
+            })
+            .catch(() => console.log('There are no finished cars'));
     };
 
     resetCars = async () => {
@@ -135,6 +138,13 @@ class Garage extends Control {
         this.winnerModal.node.textContent = `${name.toUpperCase()} won with result ${time}s`;
         this.winnerModal.node.classList.add('winner-modal--visible');
         setTimeout(() => this.winnerModal.node.classList.remove('winner-modal--visible'), 3000);
+    };
+
+    checkIfReadyToRace = () => {
+        const isReady = this.carElements.map((elem) => !elem.startBtn.node.disabled);
+        if (isReady.every((elem) => elem === true)) {
+            this.garageForm.setReadyToRace();
+        }
     };
 }
 

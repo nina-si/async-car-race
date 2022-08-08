@@ -14,12 +14,20 @@ class CarRow extends Control {
     isMoving!: boolean;
     isBroken!: boolean;
     isStopped!: boolean;
+    onStart: boolean;
+    startBtn!: Control<HTMLButtonElement>;
+    stopBtn!: Control<HTMLButtonElement>;
+    onReturnToStart!: () => void;
+    isFinished!: boolean;
+    isCancelled!: boolean;
+    controller!: AbortController;
 
     constructor(carData: TCar) {
         super(null, 'div', ['car-item']);
         this.name = carData.name;
         this.id = carData.id;
         this.color = carData.color;
+        this.onStart = true;
     }
 
     renderCarImg = (): string => `
@@ -48,10 +56,11 @@ class CarRow extends Control {
 
         const track = new Control(this.node, 'div', ['track']);
         const controlBtns = new Control(track.node, 'div', ['control-btns']);
-        const startBtn = new Control(controlBtns.node, 'button', ['btn'], 'Start');
-        startBtn.node.onclick = () => this.startDriving();
-        const stopBtn = new Control(controlBtns.node, 'button', ['btn'], 'Stop');
-        stopBtn.node.onclick = () => this.stopDriving();
+        this.startBtn = new Control(controlBtns.node, 'button', ['btn'], 'Start');
+        this.startBtn.node.onclick = () => this.startDriving();
+        this.stopBtn = new Control(controlBtns.node, 'button', ['btn'], 'Stop');
+        this.stopBtn.node.disabled = true;
+        this.stopBtn.node.onclick = () => this.stopDriving();
 
         this.carIcon = new Control(track.node, 'div', ['car']);
         this.carIcon.node.innerHTML = this.renderCarImg();
@@ -60,10 +69,14 @@ class CarRow extends Control {
     };
 
     startDriving = async () => {
+        this.onStart = false;
+        this.isCancelled = false;
+        this.startBtn.node.disabled = true;
         this.asessedDriveTime = await this.getDriveTime();
+        this.stopBtn.node.disabled = false;
         this.isStopped = false;
         this.animateCar();
-        const response = await switchDriveMode(this.id);
+        const response = await switchDriveMode(this.id, this.controller.signal);
         if (response === 500 && !this.isStopped) {
             this.isBroken = true;
             this.isMoving = false;
@@ -72,6 +85,7 @@ class CarRow extends Control {
     };
 
     animateCar = async (): Promise<void> => {
+        this.isFinished = false;
         if (this.asessedDriveTime) {
             const animationStep = (TRACK_END - TRACK_START) / (this.asessedDriveTime / ANIMATION_SPEED);
             let currentPosition = TRACK_START;
@@ -84,6 +98,7 @@ class CarRow extends Control {
                         this.carIcon.node.style.left = `${currentPosition}%`;
                     } else if (currentPosition >= TRACK_END) {
                         this.isMoving = false;
+                        this.isFinished = true;
                         clearInterval(animationInterval);
                     }
                 } else clearInterval(animationInterval);
@@ -97,14 +112,21 @@ class CarRow extends Control {
     };
 
     stopDriving = async () => {
+        this.stopBtn.node.disabled = true;
+        if (this.controller) this.controller.abort();
+        this.isCancelled = true;
+        this.onStart = true;
         await stopEngine(this.id);
         this.isMoving = false;
         this.isBroken = false;
         this.isStopped = true;
         this.carIcon.node.style.left = `${TRACK_START}%`;
+        this.startBtn.node.disabled = false;
+        this.onReturnToStart();
     };
 
-    startRace = async () => {
+    startRace = async (controller: AbortController) => {
+        this.controller = controller;
         const startTime = new Date().getTime();
 
         const result = await this.startDriving();

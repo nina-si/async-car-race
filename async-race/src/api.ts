@@ -64,13 +64,20 @@ export const getDriveParams = async (id: number, status: string) => {
     return result;
 };
 
-export const switchDriveMode = async (id: number) => {
-    const result = await fetch(`${ENGINE_URL}?id=${id}&status=${DRIVE_STATUS.DRIVE}`, {
-        method: 'PATCH',
-    });
-    console.log(result);
-
-    return result.status;
+export const switchDriveMode = async (id: number, signal?: AbortSignal) => {
+    if (signal) {
+        return (
+            await fetch(`${ENGINE_URL}?id=${id}&status=${DRIVE_STATUS.DRIVE}`, {
+                method: 'PATCH',
+                signal: signal,
+            })
+        ).status;
+    } else
+        return (
+            await fetch(`${ENGINE_URL}?id=${id}&status=${DRIVE_STATUS.DRIVE}`, {
+                method: 'PATCH',
+            })
+        ).status;
 };
 
 export const stopEngine = async (id: number) => {
