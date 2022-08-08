@@ -1,0 +1,21 @@
+.garage {
+    position: relative;
+    & .winner-modal {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 0;
+        opacity: 0;
+        transition: all ease-out 0.4s;
+        text-transform: uppercase;
+        font-size: 2rem;
+        font-weight: bold;
+        color: #daa520b3;
+        z-index: 20;
+        text-shadow: -2px 0px 2px #d1b596;
+        &--visible {
+            opacity: 1;
+            top: 20%;
+        }
+    }
+}
