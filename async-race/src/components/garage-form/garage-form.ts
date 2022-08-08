@@ -10,7 +10,7 @@ class GarageForm extends Control {
     onCarUpdate!: () => void;
     modelUpdate!: InputControl;
     colorUpdate!: InputControl;
-    updateCarBtn!: Control<HTMLElement>;
+    updateCarBtn!: Control<HTMLButtonElement>;
     onResetCars!: () => void;
     onStartRace!: () => void;
     modelInput!: InputControl;
@@ -48,7 +48,7 @@ class GarageForm extends Control {
         this.modelUpdate = new InputControl('text', this.updateForm.node, ['update-model'], 'update-model');
         this.colorUpdate = new InputControl('color', this.updateForm.node, ['update-color'], 'update-color');
         this.updateCarBtn = new Control(this.updateForm.node, 'button', ['btn', 'btn-update'], 'Update');
-        (this.updateCarBtn.node as HTMLButtonElement).disabled = true;
+        this.updateCarBtn.node.disabled = true;
     }
 
     renderGarageBtns() {
@@ -66,7 +66,7 @@ class GarageForm extends Control {
     fillUpdateForm(id: number, carName?: string, carColor?: string) {
         if (carName) (this.modelUpdate.node as HTMLInputElement).value = carName;
         if (carColor) (this.colorUpdate.node as HTMLInputElement).value = carColor;
-        (this.updateCarBtn.node as HTMLButtonElement).disabled = false;
+        this.updateCarBtn.node.disabled = false;
         this.updateCarBtn.node.onclick = async (e) => {
             e.preventDefault();
             await updateCar(id, {
