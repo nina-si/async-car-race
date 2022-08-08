@@ -15,6 +15,9 @@ class Winners extends Control {
     winnersTable!: Control<HTMLElement>;
     pagination!: Pagination;
     lastPage: number;
+    winnersTableHeader!: Control<HTMLElement>;
+    winsHeader!: Control<HTMLElement>;
+    bestTimeHeader!: Control<HTMLElement>;
 
     constructor(parentNode: HTMLElement) {
         super(parentNode, 'div', ['hidden']);
@@ -53,25 +56,48 @@ class Winners extends Control {
     };
 
     renderWinnersTable = async () => {
-        this.winnersTable.node.innerHTML = `
-            <thead>
-            <tr>
-                <td>ID</td>
-                <td>Image</td>
-                <td>Car</td>
-                <td>Wins number</td>
-                <td>Best time in secs</td>
-            </tr>
-            </thead>
-        `;
+        this.winnersTableHeader = new Control(this.winnersTable.node, 'thead');
+        this.renderWinnersTableHeader();
         const winRecords = this.winnersData.map((winner) => new WinnerRecord(this.winnersTable.node, winner));
         for (let i = 0; i < winRecords.length; i++) {
             winRecords[i].render();
         }
     };
 
+    renderWinnersTableHeader() {
+        const headerRow = new Control(this.winnersTableHeader.node, 'tr');
+        const id = new Control(null, 'td', [], 'ID');
+        const image = new Control(null, 'td', [], 'Image');
+        const car = new Control(null, 'td', [], 'Car');
+        this.winsHeader = new Control(null, 'td', [], 'Wins number');
+        this.bestTimeHeader = new Control(null, 'td', [], 'Best time in secs');
+        this.winsHeader.node.onclick = () => this.handleSortingChange(SORT_TYPE.WINS);
+        this.bestTimeHeader.node.onclick = () => this.handleSortingChange(SORT_TYPE.TIME);
+        if (this.sortType === SORT_TYPE.TIME) {
+            this.winsHeader.node.textContent = 'Wins number';
+            this.bestTimeHeader.node.textContent = `Best time in secs ${
+                this.sortOrder === SORT_ORDER.ASC ? '⬆️' : '⬇️'
+            }`;
+        }
+        if (this.sortType === SORT_TYPE.WINS) {
+            this.bestTimeHeader.node.textContent = 'Best time in secs';
+            this.winsHeader.node.textContent = `Wins number ${this.sortOrder === SORT_ORDER.ASC ? '⬆️' : '⬇️'}`;
+        }
+        headerRow.node.append(id.node, image.node, car.node, this.winsHeader.node, this.bestTimeHeader.node);
+    }
+
     changePage = (currentPage: number) => {
         this.currentPage = currentPage;
+        this.updateWinners();
+    };
+
+    handleSortingChange = (sortType: string) => {
+        if (this.sortType === sortType) {
+            this.sortOrder = this.sortOrder === SORT_ORDER.ASC ? SORT_ORDER.DESC : SORT_ORDER.ASC;
+        } else {
+            this.sortType = sortType;
+            this.sortOrder = SORT_ORDER.ASC;
+        }
         this.updateWinners();
     };
 }
