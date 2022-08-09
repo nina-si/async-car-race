@@ -23,15 +23,25 @@ body {
 }
 
 .btn {
-    padding: 1rem;
+    padding: 0.5rem 1rem;
     text-transform: uppercase;
     font-weight: bold;
+    letter-spacing: 3px;
     outline: none;
     border: none;
-    border-radius: 5%;
+    border-radius: 5px;
     color: black;
+    background-color: #92f08a;
+    cursor: pointer;
+    transition: all 0.2s ease-out;
 
     &:hover {
-        cursor: pointer;
+        background-color: #d0e9cd;
+    }
+
+    &:disabled {
+        cursor: auto;
+        color: #7c7b84;
+        background-color: #cce3ca;
     }
 }

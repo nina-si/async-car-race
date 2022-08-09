@@ -1,0 +1,26 @@
+.garage-forms-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1rem;
+    & .garage-form {
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+        align-items: stretch;
+        height: 100%;
+        & .car-color {
+            display: block;
+            cursor: pointer;
+            align-self: center;
+        }
+        & .car-model {
+            cursor: pointer;
+        }
+    }
+    & .garage-btns {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
+}

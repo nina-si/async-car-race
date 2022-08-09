@@ -2,6 +2,8 @@ import { createCar, updateCar } from '../../api';
 import Control from '../common/control';
 import InputControl from '../common/input-control';
 
+import './garage-form.styles.scss';
+
 class GarageForm extends Control {
     garageBtns!: Control<HTMLElement>;
     createForm!: Control<HTMLElement>;
@@ -20,14 +22,14 @@ class GarageForm extends Control {
     resetBtn!: Control<HTMLButtonElement>;
 
     constructor(parentNode: HTMLElement) {
-        super(parentNode);
+        super(parentNode, 'div', ['garage-forms-container']);
         this.render();
     }
 
     render = (): void => {
-        this.createForm = new Control(this.node, 'form', ['create-form']);
+        this.createForm = new Control(this.node, 'form', ['garage-form', 'create-form']);
         this.renderCreateForm();
-        this.updateForm = new Control(this.node, 'form', ['update-form']);
+        this.updateForm = new Control(this.node, 'form', ['garage-form', 'update-form']);
         this.renderUpdateForm();
         this.garageBtns = new Control(this.node, 'div', ['garage-btns']);
         this.renderGarageBtns();
@@ -45,8 +47,8 @@ class GarageForm extends Control {
 
     renderUpdateForm = (): void => {
         this.updateForm.node.innerHTML = '';
-        this.modelUpdate = new InputControl('text', this.updateForm.node, ['update-model'], 'update-model');
-        this.colorUpdate = new InputControl('color', this.updateForm.node, ['update-color'], 'update-color');
+        this.modelUpdate = new InputControl('text', this.updateForm.node, ['car-model'], 'update-model');
+        this.colorUpdate = new InputControl('color', this.updateForm.node, ['car-color'], 'update-color');
         this.updateCarBtn = new Control(this.updateForm.node, 'button', ['btn', 'btn-update'], 'Update');
         this.updateCarBtn.node.disabled = true;
     };
