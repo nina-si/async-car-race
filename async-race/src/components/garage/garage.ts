@@ -50,7 +50,7 @@ class Garage extends Control {
 
     renderCarsField = async (): Promise<void> => {
         await this.getGarageCarsData();
-        this.garageHeader.node.textContent = `Garage (${this.carsCount})`;
+        this.garageHeader.node.textContent = `Garage (${this.carsCount} cars)`;
         this.carsField = new Control(this.node, 'div', ['cars-list']);
 
         this.carElements = [];

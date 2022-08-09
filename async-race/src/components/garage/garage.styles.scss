@@ -12,10 +12,21 @@
         font-weight: bold;
         color: #daa520b3;
         z-index: 20;
-        text-shadow: -2px 0px 2px #d1b596;
+        text-shadow: -1px 0px 2px #d1b596;
         &--visible {
             opacity: 1;
             top: 20%;
         }
+    }
+
+    & .garage-header {
+        text-transform: uppercase;
+        letter-spacing: 3px;
+    }
+
+    & .cars-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
     }
 }

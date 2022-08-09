@@ -1,0 +1,45 @@
+.car-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    & .car-btns {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 0.5rem;
+        & .car-name {
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+    }
+
+    .track {
+        width: 90%;
+        border-bottom: 3px dashed bisque;
+        display: flex;
+        align-items: center;
+        position: relative;
+        padding-bottom: 5px;
+
+        .control-btns {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .car {
+            position: absolute;
+            left: 20%;
+            z-index: 10;
+        }
+
+        .flag {
+            position: absolute;
+            right: 10%;
+            font-size: 2rem;
+        }
+    }
+}

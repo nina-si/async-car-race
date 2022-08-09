@@ -4,6 +4,8 @@ import { renderCarImg } from '../../helpers';
 import { TCar, TWinner } from '../../types';
 import Control from '../common/control';
 
+import './car-row.styles.scss';
+
 class CarRow extends Control {
     name: string;
     id: number;
