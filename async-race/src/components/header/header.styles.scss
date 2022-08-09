@@ -1,0 +1,18 @@
+.main-header {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 3rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    & .btn-header {
+        background-color: #b9b9e682;
+        color: white;
+        letter-spacing: 2px;
+        padding-right: 1.5rem;
+        padding-left: 1.5rem;
+        &:hover {
+            background-color: #8787b3;
+        }
+    }
+}

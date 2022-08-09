@@ -1,5 +1,7 @@
 import Control from '../common/control';
 
+import './header.styles.scss';
+
 class Header extends Control {
     garageBtn!: Control<HTMLElement>;
     winnersBtn!: Control<HTMLElement>;
@@ -12,9 +14,9 @@ class Header extends Control {
     }
 
     render = (): void => {
-        this.garageBtn = new Control(this.node, 'button', ['btn'], 'Garage');
+        this.garageBtn = new Control(this.node, 'button', ['btn', 'btn-header'], 'Garage');
         this.garageBtn.node.onclick = () => this.onGarageClick();
-        this.winnersBtn = new Control(this.node, 'button', ['btn'], 'Winners');
+        this.winnersBtn = new Control(this.node, 'button', ['btn', 'btn-header'], 'Winners');
         this.winnersBtn.node.onclick = () => this.onWinnersClick();
     };
 }

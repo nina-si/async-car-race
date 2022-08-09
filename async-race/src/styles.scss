@@ -1,0 +1,37 @@
+$darkGrey: #302222;
+$lightGreen: #61e055;
+$white: #ffffff;
+$darkBlue: #4141a382;
+$lightBlue: #8787b3;
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: $darkGrey;
+    color: $white;
+}
+
+.hidden {
+    display: none;
+}
+
+.btn {
+    padding: 1rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    outline: none;
+    border: none;
+    border-radius: 5%;
+    color: black;
+
+    &:hover {
+        cursor: pointer;
+    }
+}

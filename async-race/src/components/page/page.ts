@@ -3,6 +3,8 @@ import Garage from '../garage';
 import Header from '../header';
 import Winners from '../winners';
 
+import './page.styles.scss';
+
 class Page extends Control {
     header: Header;
     garage: Garage;
