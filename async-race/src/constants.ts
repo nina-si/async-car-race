@@ -9,7 +9,7 @@ export const ENGINE_URL = `${BASE_URL}/engine`;
 export const CARS_PER_PAGE = 7;
 export const WINNERS_PER_PAGE = 10;
 
-export const TRACK_START = 20; // начальная точка трека в % от ширины родителя
+export const TRACK_START = 22; // начальная точка трека в % от ширины родителя
 export const TRACK_END = 91; // конечная точка трека в % от ширины родителя
 export const ANIMATION_SPEED = 10;
 
