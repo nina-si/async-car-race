@@ -1,0 +1,12 @@
+.pagination {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+
+    & .btn--current-page {
+        &:hover {
+            background-color: #92f08a;
+            cursor: auto;
+        }
+    }
+}

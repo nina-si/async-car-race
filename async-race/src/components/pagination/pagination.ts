@@ -1,5 +1,7 @@
 import Control from '../common/control';
 
+import './pagination.styles.scss';
+
 class Pagination extends Control {
     currentPage: number;
     lastPage: number;
@@ -13,10 +15,10 @@ class Pagination extends Control {
     }
 
     render = (): void => {
-        const prev = new Control(null, 'button', [], 'previous');
+        const prev = new Control(null, 'button', ['btn'], 'previous');
         if (this.currentPage === 1) (prev.node as HTMLButtonElement).disabled = true;
-        const current = new Control(null, 'button', [], `${this.currentPage}`);
-        const next = new Control(null, 'button', [], 'next');
+        const current = new Control(null, 'button', ['btn', 'btn--current-page'], `${this.currentPage}`);
+        const next = new Control(null, 'button', ['btn'], 'next');
         if (this.currentPage === this.lastPage) (next.node as HTMLButtonElement).disabled = true;
         this.node.append(prev.node, current.node, next.node);
         prev.node.onclick = () => this.switchToPrevPage();
