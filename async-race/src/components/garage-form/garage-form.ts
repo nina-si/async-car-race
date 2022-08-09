@@ -24,50 +24,50 @@ class GarageForm extends Control {
         this.render();
     }
 
-    render() {
+    render = (): void => {
         this.createForm = new Control(this.node, 'form', ['create-form']);
         this.renderCreateForm();
         this.updateForm = new Control(this.node, 'form', ['update-form']);
         this.renderUpdateForm();
         this.garageBtns = new Control(this.node, 'div', ['garage-btns']);
         this.renderGarageBtns();
-    }
+    };
 
-    renderCreateForm() {
+    renderCreateForm = (): void => {
         this.modelInput = new InputControl('text', this.createForm.node, ['car-model'], 'car-model');
         this.colorInput = new InputControl('color', this.createForm.node, ['car-color'], 'car-color');
         const createCarBtn = new Control(this.createForm.node, 'button', ['btn', 'btn-create'], 'Create');
-        createCarBtn.node.onclick = (e) => {
+        createCarBtn.node.onclick = (e: MouseEvent): void => {
             e.preventDefault();
             this.handleCreateCar();
         };
-    }
+    };
 
-    renderUpdateForm() {
+    renderUpdateForm = (): void => {
         this.updateForm.node.innerHTML = '';
         this.modelUpdate = new InputControl('text', this.updateForm.node, ['update-model'], 'update-model');
         this.colorUpdate = new InputControl('color', this.updateForm.node, ['update-color'], 'update-color');
         this.updateCarBtn = new Control(this.updateForm.node, 'button', ['btn', 'btn-update'], 'Update');
         this.updateCarBtn.node.disabled = true;
-    }
+    };
 
-    renderGarageBtns() {
+    renderGarageBtns = (): void => {
         this.raceBtn = new Control(this.garageBtns.node, 'button', ['btn', 'btn-race'], 'Race');
-        this.raceBtn.node.onclick = () => {
+        this.raceBtn.node.onclick = (): void => {
             this.raceBtn.node.disabled = true;
             this.onStartRace();
         };
         this.resetBtn = new Control(this.garageBtns.node, 'button', ['btn'], 'Reset');
-        this.resetBtn.node.onclick = () => this.onResetCars();
+        this.resetBtn.node.onclick = (): void => this.onResetCars();
         const generateCarsBtn = new Control(this.garageBtns.node, 'button', ['btn'], 'Generate Cars');
-        generateCarsBtn.node.onclick = () => this.onGenerateCars();
-    }
+        generateCarsBtn.node.onclick = (): void => this.onGenerateCars();
+    };
 
-    fillUpdateForm(id: number, carName?: string, carColor?: string) {
+    fillUpdateForm = (id: number, carName?: string, carColor?: string): void => {
         if (carName) (this.modelUpdate.node as HTMLInputElement).value = carName;
         if (carColor) (this.colorUpdate.node as HTMLInputElement).value = carColor;
         this.updateCarBtn.node.disabled = false;
-        this.updateCarBtn.node.onclick = async (e) => {
+        this.updateCarBtn.node.onclick = async (e: MouseEvent): Promise<void> => {
             e.preventDefault();
             await updateCar(id, {
                 name: (this.modelUpdate.node as HTMLInputElement).value,
@@ -76,9 +76,9 @@ class GarageForm extends Control {
             this.onCarUpdate();
             this.renderUpdateForm();
         };
-    }
+    };
 
-    handleCreateCar = async () => {
+    handleCreateCar = async (): Promise<void> => {
         const color = (this.colorInput.node as HTMLInputElement).value;
         const nameValue = (this.modelInput.node as HTMLInputElement).value;
         const newName = nameValue.length ? nameValue : 'Noname car';
@@ -88,11 +88,11 @@ class GarageForm extends Control {
         this.onCarAdd();
     };
 
-    setReadyToRace = () => {
+    setReadyToRace = (): void => {
         this.raceBtn.node.disabled = false;
     };
 
-    reset = () => {
+    reset = (): void => {
         this.setReadyToRace();
         this.renderUpdateForm();
     };

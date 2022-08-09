@@ -9,9 +9,9 @@ class App {
         this.page = new Page();
     }
 
-    start() {
+    start = (): void => {
         rootElement.append(this.page.node);
-    }
+    };
 }
 
 export default App;

@@ -18,15 +18,15 @@ class Page extends Control {
         this.header.onWinnersClick = () => this.showWinnersView();
     }
 
-    showGarageView() {
+    showGarageView = (): void => {
         this.winners.hideNode();
         this.garage.showNode();
-    }
+    };
 
-    showWinnersView() {
+    showWinnersView = (): void => {
         this.garage.hideNode();
         this.winners.showNode();
-    }
+    };
 }
 
 export default Page;

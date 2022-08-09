@@ -12,7 +12,7 @@ class Pagination extends Control {
         this.render();
     }
 
-    render() {
+    render = (): void => {
         const prev = new Control(null, 'button', [], 'previous');
         if (this.currentPage === 1) (prev.node as HTMLButtonElement).disabled = true;
         const current = new Control(null, 'button', [], `${this.currentPage}`);
@@ -21,21 +21,21 @@ class Pagination extends Control {
         this.node.append(prev.node, current.node, next.node);
         prev.node.onclick = () => this.switchToPrevPage();
         next.node.onclick = () => this.switchToNextPage();
-    }
+    };
 
-    switchToPrevPage() {
+    switchToPrevPage = (): void => {
         if (this.currentPage > 1) {
             this.currentPage = this.currentPage - 1;
             this.onPageChange(this.currentPage);
         }
-    }
+    };
 
-    switchToNextPage() {
+    switchToNextPage = (): void => {
         if (this.currentPage < this.lastPage) {
             this.currentPage = this.currentPage + 1;
             this.onPageChange(this.currentPage);
         }
-    }
+    };
 }
 
 export default Pagination;

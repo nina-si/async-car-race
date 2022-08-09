@@ -15,3 +15,8 @@ export type TWinner = {
     name: string;
     time: number;
 };
+
+export type TDriveParams = {
+    velocity: number;
+    distance: number;
+};

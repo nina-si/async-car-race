@@ -31,7 +31,7 @@ class Garage extends Control {
     onCarDataUpdate!: () => void;
 
     constructor(parentNode: HTMLElement) {
-        super(parentNode, 'section', ['garage'], 'Garage');
+        super(parentNode, 'section', ['garage']);
         this.currentPage = 1;
         this.lastPage = 1;
         this.winnerModal = new Control(this.node, 'div', ['winner-modal']);
@@ -48,7 +48,7 @@ class Garage extends Control {
         this.renderCarsField();
     }
 
-    renderCarsField = async () => {
+    renderCarsField = async (): Promise<void> => {
         await this.getGarageCarsData();
         this.garageHeader.node.textContent = `Garage (${this.carsCount})`;
         this.carsField = new Control(this.node, 'div', ['cars-list']);
@@ -67,20 +67,20 @@ class Garage extends Control {
         this.pagination.onPageChange = (currentPage) => this.changePage(currentPage);
     };
 
-    getGarageCarsData = async () => {
+    getGarageCarsData = async (): Promise<void> => {
         const garageData = await getCars(this.currentPage, CARS_PER_PAGE);
         this.garageCars = garageData.cars;
         this.carsCount = garageData.count;
         this.lastPage = Math.ceil(Number(this.carsCount) / CARS_PER_PAGE);
     };
 
-    updateCarsField = () => {
+    updateCarsField = (): void => {
         this.carsField.destroy();
         this.pagination.destroy();
         this.renderCarsField();
     };
 
-    generateNewCars = async () => {
+    generateNewCars = async (): Promise<void> => {
         const newCarsData = [];
         for (let i = 0; i < 100; i++) {
             newCarsData.push(generateNewCar());
@@ -88,18 +88,18 @@ class Garage extends Control {
         Promise.allSettled(newCarsData.map((newCar) => createCar(newCar))).then(() => this.updateCarsField());
     };
 
-    selectCar(id: number, name: string, color: string) {
+    selectCar = (id: number, name: string, color: string): void => {
         this.garageForm.fillUpdateForm(id, name, color);
-    }
+    };
 
-    removeCarFromGarage = async (id: number) => {
+    removeCarFromGarage = async (id: number): Promise<void> => {
         await deleteCar(id);
         await deleteCarFromWinners(id);
         this.updateCarsField();
         this.onCarDataUpdate();
     };
 
-    startRace = async () => {
+    startRace = async (): Promise<void> => {
         const controller = new AbortController();
         Promise.any(this.carElements.map((car) => car.startRace(controller)))
             .then((data) => {
@@ -108,19 +108,19 @@ class Garage extends Control {
             .catch(() => console.log('There are no finished cars'));
     };
 
-    resetCars = async () => {
+    resetCars = async (): Promise<PromiseSettledResult<void>[]> => {
         return Promise.allSettled(this.carElements.map((car) => car.stopDriving()));
     };
 
-    updateWinnerRecord = async (data: TWinner) => {
+    updateWinnerRecord = async (data: TWinner): Promise<void> => {
         const { id, name, time } = data;
         this.displayWinnerModal(name, time);
         const prevRecord = await getWinnerData(id);
-        if (!prevRecord.length) {
+        if (prevRecord && !prevRecord.length) {
             const newRecord = { id, wins: 1, time };
             await createNewWinner(newRecord);
             this.onCarDataUpdate();
-        } else if (prevRecord.length) {
+        } else if (prevRecord && prevRecord.length) {
             const prevRecordData = prevRecord[0];
             const bestTime = prevRecordData.time < time ? prevRecordData.time : time;
             const newRecord = { wins: prevRecordData.wins + 1, time: bestTime };
@@ -129,19 +129,19 @@ class Garage extends Control {
         }
     };
 
-    changePage = (currentPage: number) => {
+    changePage = (currentPage: number): void => {
         this.currentPage = currentPage;
         this.garageForm.reset();
         this.updateCarsField();
     };
 
-    displayWinnerModal = (name: string, time: number) => {
+    displayWinnerModal = (name: string, time: number): void => {
         this.winnerModal.node.textContent = `${name.toUpperCase()} won with result ${time}s`;
         this.winnerModal.node.classList.add('winner-modal--visible');
         setTimeout(() => this.winnerModal.node.classList.remove('winner-modal--visible'), 3000);
     };
 
-    checkIfReadyToRace = () => {
+    checkIfReadyToRace = (): void => {
         const isReady = this.carElements.map((elem) => !elem.startBtn.node.disabled);
         if (isReady.every((elem) => elem === true)) {
             this.garageForm.setReadyToRace();

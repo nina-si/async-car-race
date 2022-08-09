@@ -17,7 +17,7 @@ class WinnerRecord extends Control {
         this.time = winner.time;
     }
 
-    render = async () => {
+    render = async (): Promise<void> => {
         await this.getCarData();
         const idCell = new Control(null, 'td', [], this.id.toString());
         const imageCell = new Control(this.node, 'div', []);
@@ -28,7 +28,7 @@ class WinnerRecord extends Control {
         this.node.append(idCell.node, imageCell.node, nameCell.node, winsCell.node, timeCell.node);
     };
 
-    getCarData = async () => {
+    getCarData = async (): Promise<void> => {
         const response = await getCarInfo(this.id);
         this.name = response.name;
         this.color = response.color;

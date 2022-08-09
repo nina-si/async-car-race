@@ -29,7 +29,7 @@ class Winners extends Control {
         this.renderWinners();
     }
 
-    renderWinners = async () => {
+    renderWinners = async (): Promise<void> => {
         await this.getWinnersData();
         this.header.node.textContent = `Winners (${this.winnersCount})`;
         this.winnersTable = new Control(this.node, 'table', ['winners-table']);
@@ -38,14 +38,14 @@ class Winners extends Control {
         this.renderWinnersTable();
     };
 
-    getWinnersData = async () => {
+    getWinnersData = async (): Promise<void> => {
         const response = await getWinners(this.currentPage, WINNERS_PER_PAGE, this.sortType, this.sortOrder);
         this.winnersCount = response.count;
         this.lastPage = Math.ceil(Number(this.winnersCount) / WINNERS_PER_PAGE);
         this.winnersData = response.winners;
     };
 
-    updateWinners = async () => {
+    updateWinners = async (): Promise<void> => {
         await this.getWinnersData();
         this.header.node.textContent = `Winners (${this.winnersCount})`;
         this.winnersTable.node.innerHTML = '';
@@ -55,7 +55,7 @@ class Winners extends Control {
         this.pagination.onPageChange = (currentPage) => this.changePage(currentPage);
     };
 
-    renderWinnersTable = async () => {
+    renderWinnersTable = async (): Promise<void> => {
         this.winnersTableHeader = new Control(this.winnersTable.node, 'thead');
         this.renderWinnersTableHeader();
         const winRecords = this.winnersData.map((winner) => new WinnerRecord(this.winnersTable.node, winner));
@@ -64,7 +64,7 @@ class Winners extends Control {
         }
     };
 
-    renderWinnersTableHeader() {
+    renderWinnersTableHeader = (): void => {
         const headerRow = new Control(this.winnersTableHeader.node, 'tr');
         const id = new Control(null, 'td', [], 'ID');
         const image = new Control(null, 'td', [], 'Image');
@@ -88,14 +88,14 @@ class Winners extends Control {
             this.winsHeader.node.textContent = `Wins number ${this.sortOrder === SORT_ORDER.ASC ? '⬆️' : '⬇️'}`;
         }
         headerRow.node.append(id.node, image.node, car.node, this.winsHeader.node, this.bestTimeHeader.node);
-    }
+    };
 
-    changePage = (currentPage: number) => {
+    changePage = (currentPage: number): void => {
         this.currentPage = currentPage;
         this.updateWinners();
     };
 
-    handleSortingChange = (sortType: string) => {
+    handleSortingChange = (sortType: string): void => {
         if (this.sortType === sortType) {
             this.sortOrder = this.sortOrder === SORT_ORDER.ASC ? SORT_ORDER.DESC : SORT_ORDER.ASC;
         } else {

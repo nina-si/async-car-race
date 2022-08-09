@@ -1,7 +1,7 @@
 import { getDriveParams, stopEngine, switchDriveMode } from '../../api';
 import { ANIMATION_SPEED, DRIVE_STATUS, TRACK_END, TRACK_START } from '../../constants';
 import { renderCarImg } from '../../helpers';
-import { TCar } from '../../types';
+import { TCar, TWinner } from '../../types';
 import Control from '../common/control';
 
 class CarRow extends Control {
@@ -47,7 +47,7 @@ class CarRow extends Control {
         flag.node.innerHTML = '&#9872';
     };
 
-    startDriving = async () => {
+    startDriving = async (): Promise<number> => {
         this.startBtn.node.disabled = true;
         this.asessedDriveTime = await this.getDriveTime();
         this.stopBtn.node.disabled = false;
@@ -83,7 +83,7 @@ class CarRow extends Control {
         return driveParameters.distance / driveParameters.velocity;
     };
 
-    stopDriving = async () => {
+    stopDriving = async (): Promise<void> => {
         this.stopBtn.node.disabled = true;
         if (this.controller) this.controller.abort();
         await stopEngine(this.id);
@@ -93,7 +93,7 @@ class CarRow extends Control {
         this.onReturnToStart();
     };
 
-    startRace = async (controller: AbortController) => {
+    startRace = async (controller: AbortController): Promise<TWinner> => {
         this.controller = controller;
         const startTime = new Date().getTime();
 

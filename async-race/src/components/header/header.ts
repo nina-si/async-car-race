@@ -11,12 +11,12 @@ class Header extends Control {
         this.render();
     }
 
-    render() {
+    render = (): void => {
         this.garageBtn = new Control(this.node, 'button', ['btn'], 'Garage');
         this.garageBtn.node.onclick = () => this.onGarageClick();
         this.winnersBtn = new Control(this.node, 'button', ['btn'], 'Winners');
         this.winnersBtn.node.onclick = () => this.onWinnersClick();
-    }
+    };
 }
 
 export default Header;
