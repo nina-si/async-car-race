@@ -1,0 +1,26 @@
+.winners {
+    & .winners-header {
+        text-transform: uppercase;
+        letter-spacing: 3px;
+    }
+
+    & .winners-table {
+        width: 90%;
+        max-width: 960px;
+        border-collapse: collapse;
+
+        & thead {
+            text-transform: uppercase;
+            font-weight: bold;
+
+            & .sort-cell {
+                cursor: pointer;
+            }
+
+            & td {
+                text-align: left;
+                padding: 5px;
+            }
+        }
+    }
+}

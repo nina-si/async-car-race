@@ -3,6 +3,8 @@ import { renderCarImg } from '../../helpers';
 import { TWinnerData } from '../../types';
 import Control from '../common/control';
 
+import './winner-record.styles.scss';
+
 class WinnerRecord extends Control {
     id: number;
     wins: number;

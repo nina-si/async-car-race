@@ -5,6 +5,8 @@ import Control from '../common/control';
 import Pagination from '../pagination';
 import WinnerRecord from '../winner-record';
 
+import './winners.styles.scss';
+
 class Winners extends Control {
     header: Control<HTMLElement>;
     currentPage: number;
@@ -20,7 +22,7 @@ class Winners extends Control {
     bestTimeHeader!: Control<HTMLElement>;
 
     constructor(parentNode: HTMLElement) {
-        super(parentNode, 'div', ['hidden']);
+        super(parentNode, 'div', ['winners', 'hidden']);
         this.header = new Control(this.node, 'h2', ['winners-header']);
         this.currentPage = 1;
         this.lastPage = 1;
@@ -69,8 +71,8 @@ class Winners extends Control {
         const id = new Control(null, 'td', [], 'ID');
         const image = new Control(null, 'td', [], 'Image');
         const car = new Control(null, 'td', [], 'Car');
-        this.winsHeader = new Control(null, 'td', [], 'Wins number');
-        this.bestTimeHeader = new Control(null, 'td', [], 'Best time in secs');
+        this.winsHeader = new Control(null, 'td', ['sort-cell'], 'Wins number');
+        this.bestTimeHeader = new Control(null, 'td', ['sort-cell'], 'Best time in secs');
         this.winsHeader.node.onclick = () => this.handleSortingChange(SORT_TYPE.WINS);
         this.bestTimeHeader.node.onclick = () => this.handleSortingChange(SORT_TYPE.TIME);
         if (this.sortType === SORT_TYPE.ID) {

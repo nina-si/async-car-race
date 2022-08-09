@@ -1,0 +1,10 @@
+.winner-record {
+    & td {
+        text-align: left;
+        padding: 5px;
+    }
+    &:hover {
+        cursor: pointer;
+        background-color: #534545;
+    }
+}
