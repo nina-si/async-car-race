@@ -1,6 +1,6 @@
 # Asynchronous Cars Race
 
-SPA-game to manage the collection of cars, operate their engines, visualize races and show statistics. Based on [this mock-server](https://github.com/mikhama/async-race-api)
+SPA-game to manage the collection of cars, operate their engines, visualize races and show statistics. This project helped me to get the hang of Fetch API and working with asynchronous requests. Simple backend is provided by [this mock-server](https://github.com/mikhama/async-race-api)
 
 👉 [Check it out here](async-car-race.netlify.app)<br>
 **Important:** As it takes some time for server to start, you might need to refresh a page, if there are no cars displayed.
