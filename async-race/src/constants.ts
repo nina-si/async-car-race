@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:3000';
+export const BASE_URL = 'https://async-race-api-mg9e.onrender.com';
 
 export const GARAGE_URL = `${BASE_URL}/garage`;
 
